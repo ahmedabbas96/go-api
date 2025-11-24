@@ -2,9 +2,9 @@
 FROM gcr.io/distroless/base-debian12
 
 # Copy the binary built by CI
-COPY app-binary .
+COPY go-app .
 
 EXPOSE 8080
 USER nonroot:nonroot
 
-ENTRYPOINT ["./app-binary"]
+ENTRYPOINT ["./go-app"]
