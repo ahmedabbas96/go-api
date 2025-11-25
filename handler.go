@@ -1,11 +1,31 @@
 package main
 
 import (
+	"time"
+	"context"
 	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+// GET /healthz -> basic "process is alive"
+func (a *App) HandleHealthz(c *gin.Context){
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+}
+
+// GET /readyz -> check DB connectivity
+func (a *App) HandleReadyz(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+	defer cancel()
+
+	if err := a.DB.PingContext(ctx); err != nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"status": "not-ready", "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ready"})
+}
 
 // POST /userCreate
 // { "username": "...", "email": "...", "password": "..." }

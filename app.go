@@ -47,6 +47,10 @@ func NewApp() *App {
 func (a *App) Run(addr string) error {
 	r := gin.Default()
 
+	// Health endpoints (no auth)
+	r.GET("/healthz", a.HandleHealthz)
+	r.GET("/readyz", a.HandleReadyz)
+
 	// Public endpoints
 	r.POST("/userCreate", a.HandleUserCreate)
 	r.POST("/login", a.HandleLogin)
