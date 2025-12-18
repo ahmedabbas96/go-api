@@ -45,7 +45,10 @@ func NewApp() *App {
 }
 
 func (a *App) Run(addr string) error {
-	r := gin.Default()
+	r := gin.New()
+
+	// Structured logger + panic recovery
+	r.Use(FilteredLogger(), gin.Recovery())
 
 	// Health endpoints (no auth)
 	r.GET("/healthz", a.HandleHealthz)
