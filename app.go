@@ -55,13 +55,13 @@ func (a *App) Run(addr string) error {
 	r.GET("/readyz", a.HandleReadyz)
 
 	// Public endpoints
-	r.POST("/userCreate", a.HandleUserCreate)
-	r.POST("/login", a.HandleLogin)
+	r.POST("/api/v1/userCreate", a.HandleUserCreate)
+	r.POST("/api/v1/login", a.HandleLogin)
 
 	// Protected endpoints
 	auth := r.Group("/")
 	auth.Use(a.AuthMiddleware())
-	auth.GET("/userDetails", a.HandleUserDetails)
+	auth.GET("/api/v1/userDetails", a.HandleUserDetails)
 
 	log.Printf("server listening on %s\n", addr)
 	return r.Run(addr)
